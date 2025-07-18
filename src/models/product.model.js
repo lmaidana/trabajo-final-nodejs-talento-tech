@@ -14,4 +14,17 @@ export const getAllProducts = async () => {
     }
 }
 
-export default {getAllProducts};
+export const getProductById = async (id) => {
+    try {
+        const prodRef = doc(productCollection,id);
+        const prodSnap = await getDoc(prodRef);
+        
+        if (!prodSnap.exists()) return null;
+
+        return {id: prodSnap.id, ...prodSnap.data()};
+    } catch (error) {
+        throw new Error("Error al obtener el producto", error.message);
+    }
+}
+
+export default {getAllProducts, getProductById};
