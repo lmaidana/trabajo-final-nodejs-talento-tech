@@ -1,13 +1,23 @@
-# Trabajo final nodeJS - Talento Tech
+# API REST de productos - Proyecto final Node.js (Talento Tech)
 
 Trabajo final para el curso de NodeJS dictado por Talento Tech.
 
 ## Características
 
-- API REST.
-- Operaciones CRUD.
-- Autorización y autenticación.
-- Firestore.
+- Servidor web construido con Express.js
+- Operaciones CRUD sobre productos
+- Autenticación mediante JSON Web Tokens (JWT)
+- Conexión con Firebase Firestore como base de datos
+- Rutas protegidas y públicas
+- Middleware personalizado para validación, error 404 y parsing de JSON
+
+## Tecnologías utilizadas
+
+- Node.js
+- Express.js
+- Firebase Firestore
+- JSON Web Token (JWT)
+- dotenv
 
 ## Consigna
 
@@ -28,6 +38,17 @@ products.routes.js:
 auth.routes.js:
 
 **POST /auth/login** recibe las credenciales de usuario en el cuerpo (body) de la petición y devuelve el Bearer token si son válidas o un error de autenticación en caso contrario.
+
+## Limitaciones
+
+Esta api permite crear o actualizar productos siempre y cuando tenga un json web token válido, y para la obtención del mismo se tiene un usuario default de prueba. Se valida al momento de crear o actualizar que el producto tenga únicamente nombre y precio, por el resto no se tuvo consideración alguna. Las rutas de obtención de listado de productos, borrado y obtención de producto por id son de caracter público y no se protegieron.
+
+## Instalación
+
+1. Clona el repositorio
+2. Ejecutá `npm install`
+3. Configurá el archivo `.env` con tus credenciales
+4. Ejecutá el servidor con `npm start` o `node index.js`
 
 ## Licencia
 
