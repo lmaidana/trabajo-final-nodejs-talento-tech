@@ -1,4 +1,5 @@
 import serviceProduct from "../services/product.service.js";
+import { validateProductData } from "../utils/validator.js";
 
 const getProducts = async (req, res) => {
     try {
@@ -37,6 +38,11 @@ const deleteProduct = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
+    const validator = validateProductData(req.body);
+    if (!validator.valid){
+        return res.status(400).json({ message: validator.message });
+    }
+
     try {
         const newProduct = req.body;
         const created = await serviceProduct.createProduct(newProduct);
@@ -47,6 +53,10 @@ const createProduct = async (req, res) => {
 }
 
 const updateProduct = async (req, res) => {
+    const validator = validateProductData(req.body);
+    if (!validator.valid){
+        return res.status(400).json({ message: validator.message });
+    }
     try {
         const { id } = req.params;    
         const productToUpdate = req.body;
