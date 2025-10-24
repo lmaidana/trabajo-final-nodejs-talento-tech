@@ -14,7 +14,28 @@ export async function login(req, res) {
     }
     const payload = {id, email};
     const token = generate_token(payload);
-    res.status(200).json({token});
+    res.cookie("token", token, {
+    httpOnly: true,
+    secure: false, // para solo en HTTPS modificar a true
+    sameSite: "Strict", // o "Lax"?
+    maxAge: 60 * 60 * 1000 // 1 hora
+    });
+    res.status(200).json({ message: "Login exitoso" });
+    // res.status(200).json({token});
 }
 
-export default {login};
+export const logout = (req, res) => {
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, // o true si uso HTTPS
+    sameSite: "Strict"
+    });
+    res.status(200).json({ message: "Sesión cerrada" });
+}
+
+export const me = (req, res) => {
+  res.status(200).json({ user: req.user });
+};
+
+
+export default {login, logout, me};
