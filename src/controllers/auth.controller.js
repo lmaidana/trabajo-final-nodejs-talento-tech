@@ -1,27 +1,45 @@
 import { generate_token } from "../utils/jwt.js";
 
+const admin_user = {
+  id: 1,
+  email: "admin@admin.com",
+  password: "123",
+  role: "admin"
+};
+
 const default_user = {
-    id: 1,
-    email: "admin@admin.com",
-    password: "123"
-}
+  id: 2,
+  email: "user@user.com",
+  password: "123",
+  role: "user"
+};
+
 
 export async function login(req, res) {
     // validacion harcodeada y no asincronica, sin uso de service o model ya que se usa defalut_user
     const {id, email, password} = req.body;
-    if (email !== "admin@admin.com" || password !== "123"){
-        res.status(401).json({message: "Credenciales invalidas"})
+    
+    let user = null;
+    if (email === admin_user.email && password === admin_user.password) {
+        user = admin_user;
+    } else if (email === default_user.email && password === default_user.password) {
+        user = default_user;
     }
-    const payload = {id, email};
+
+    if (!user) {
+        return res.status(401).json({ message: "Credenciales inválidas" });
+    }
+
+    
+    const payload = { id: user.id, email: user.email, role: user.role };
     const token = generate_token(payload);
     res.cookie("token", token, {
-    httpOnly: true,
-    secure: false, // para solo en HTTPS modificar a true
-    sameSite: "Strict", // o "Lax"?
-    maxAge: 60 * 60 * 1000 // 1 hora
+        httpOnly: true,
+        secure: false, // para solo en HTTPS modificar a true
+        sameSite: "Strict", // o "Lax"?
+        maxAge: 60 * 60 * 1000 // 1 hora
     });
     res.status(200).json({ message: "Login exitoso" });
-    // res.status(200).json({token});
 }
 
 export const logout = (req, res) => {

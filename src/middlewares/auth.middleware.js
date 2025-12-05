@@ -11,8 +11,21 @@ export const authenticate = (req, res, next) => {
     return res.status(403).json({ message: "Token inválido o expirado" });
   }
 
-  req.user = verificationResult.decoded;
+  req.user = verificationResult.decoded;  
   next();
 };
+
+export const authorizeAdmin = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "No autenticado" });
+  }
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Acceso denegado: se requiere rol admin" });
+  }
+
+  next();
+};
+
 
 export default authenticate;
