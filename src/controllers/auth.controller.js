@@ -30,23 +30,25 @@ export async function login(req, res) {
         return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
-    
     const payload = { id: user.id, email: user.email, role: user.role };
     const token = generate_token(payload);
     res.cookie("token", token, {
         httpOnly: true,
         secure: false, // para solo en HTTPS modificar a true
-        sameSite: "Strict", // o "Lax"?
-        maxAge: 60 * 60 * 1000 // 1 hora
+        sameSite: "Lax", // o "Lax"?
+        maxAge: 240 * 1000 // 4 minutos
     });
-    res.status(200).json({ message: "Login exitoso" });
+    res.status(200).json({ 
+        message: "Login exitoso", 
+        user: payload   // 👈 incluye id, email y role
+    });
 }
 
 export const logout = (req, res) => {
     res.clearCookie("token", {
     httpOnly: true,
     secure: false, // o true si uso HTTPS
-    sameSite: "Strict"
+    sameSite: "Lax"
     });
     res.status(200).json({ message: "Sesión cerrada" });
 }
