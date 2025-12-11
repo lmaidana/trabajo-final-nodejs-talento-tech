@@ -14,7 +14,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000","https://mi-frontend.vercel.app"],
+    origin: ["http://localhost:5173", "http://localhost:3000","https://tienda-de-productos.vercel.app"],
     credentials: true,
   })
 );
